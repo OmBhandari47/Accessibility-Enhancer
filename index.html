@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccessiRead - Accessibility Enhancement Tool</title>
+    <meta name="description" content="AccessiRead provides comprehensive accessibility features including text-to-speech, visual adjustments, and reading aids for enhanced web accessibility.">
+    
+    <!-- Web Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Skip to Content Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Accessibility Controls Sidebar -->
+        <aside id="controls" class="sidebar" role="complementary" aria-label="Accessibility Controls">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-universal-access" aria-hidden="true"></i> AccessiRead Controls</h2>
+                <button id="collapse-sidebar" class="collapse-btn" aria-label="Collapse sidebar" title="Collapse Controls">
+                    <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                </button>
+            </div>
+            
+            <div class="controls-content">
+                <!-- Visual Aids Section -->
+                <section class="control-section" aria-labelledby="visual-aids-heading">
+                    <h3 id="visual-aids-heading"><i class="fas fa-eye" aria-hidden="true"></i> Visual Aids</h3>
+                    
+                    <!-- Font Size Control -->
+                    <div class="control-group">
+                        <label for="font-size-slider" class="control-label">
+                            <i class="fas fa-text-height" aria-hidden="true"></i>
+                            Font Size: <span id="font-size-value">16px</span>
+                        </label>
+                        <div class="slider-container">
+                            <button id="font-decrease" class="slider-btn" aria-label="Decrease font size">
+                                <i class="fas fa-minus" aria-hidden="true"></i>
+                            </button>
+                            <input type="range" id="font-size-slider" class="slider" min="12" max="24" value="16" aria-describedby="font-size-value">
+                            <button id="font-increase" class="slider-btn" aria-label="Increase font size">
+                                <i class="fas fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Dyslexic Font Toggle -->
+                    <div class="control-group">
+                        <label class="toggle-control">
+                            <input type="checkbox" id="dyslexic-font" aria-describedby="dyslexic-font-desc">
+                            <span class="toggle-slider"></span>
+                            <span class="control-text">
+                                <i class="fas fa-font" aria-hidden="true"></i>
+                                Dyslexic-Friendly Font
+                            </span>
+                        </label>
+                        <small id="dyslexic-font-desc" class="control-description">
+                            Uses OpenDyslexic font for better readability
+                        </small>
+                    </div>
+                    
+                    <!-- Line Spacing Control -->
+                    <div class="control-group">
+                        <label for="line-spacing-slider" class="control-label">
+                            <i class="fas fa-align-justify" aria-hidden="true"></i>
+                            Line Spacing: <span id="line-spacing-value">1.0x</span>
+                        </label>
+                        <div class="slider-container">
+                            <button id="spacing-decrease" class="slider-btn" aria-label="Decrease line spacing">
+                                <i class="fas fa-minus" aria-hidden="true"></i>
+                            </button>
+                            <input type="range" id="line-spacing-slider" class="slider" min="10" max="20" value="10" step="1" aria-describedby="line-spacing-value">
+                            <button id="spacing-increase" class="slider-btn" aria-label="Increase line spacing">
+                                <i class="fas fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Paragraph Highlighting -->
+                    <div class="control-group">
+                        <label class="toggle-control">
+                            <input type="checkbox" id="paragraph-highlighting" aria-describedby="highlight-desc">
+                            <span class="toggle-slider"></span>
+                            <span class="control-text">
+                                <i class="fas fa-highlighter" aria-hidden="true"></i>
+                                Paragraph Highlighting
+                            </span>
+                        </label>
+                        <small id="highlight-desc" class="control-description">
+                            Click paragraphs to highlight them
+                        </small>
+                    </div>
+                </section>
+                
+                <!-- Theme Controls Section -->
+                <section class="control-section" aria-labelledby="theme-heading">
+                    <h3 id="theme-heading"><i class="fas fa-palette" aria-hidden="true"></i> Theme Controls</h3>
+                    
+                    <!-- Dark Mode -->
+                    <div class="control-group">
+                        <label class="toggle-control">
+                            <input type="checkbox" id="dark-mode" aria-describedby="dark-mode-desc">
+                            <span class="toggle-slider"></span>
+                            <span class="control-text">
+                                <i class="fas fa-moon" aria-hidden="true"></i>
+                                Dark Mode
+                            </span>
+                        </label>
+                        <small id="dark-mode-desc" class="control-description">
+                            Dark background with light text
+                        </small>
+                    </div>
+                    
+                    <!-- High Contrast -->
+                    <div class="control-group">
+                        <label class="toggle-control">
+                            <input type="checkbox" id="high-contrast" aria-describedby="high-contrast-desc">
+                            <span class="toggle-slider"></span>
+                            <span class="control-text">
+                                <i class="fas fa-adjust" aria-hidden="true"></i>
+                                High Contrast
+                            </span>
+                        </label>
+                        <small id="high-contrast-desc" class="control-description">
+                            Enhanced contrast for better visibility
+                        </small>
+                    </div>
+                    
+                    <!-- Low Contrast -->
+                    <div class="control-group">
+                        <label class="toggle-control">
+                            <input type="checkbox" id="low-contrast" aria-describedby="low-contrast-desc">
+                            <span class="toggle-slider"></span>
+                            <span class="control-text">
+                                <i class="fas fa-circle-half-stroke" aria-hidden="true"></i>
+                                Low Contrast
+                            </span>
+                        </label>
+                        <small id="low-contrast-desc" class="control-description">
+                            Reduced contrast for light sensitivity
+                        </small>
+                    </div>
+                    
+                    <!-- Monochrome Filter -->
+                    <div class="control-group">
+                        <label class="toggle-control">
+                            <input type="checkbox" id="monochrome" aria-describedby="monochrome-desc">
+                            <span class="toggle-slider"></span>
+                            <span class="control-text">
+                                <i class="fas fa-circle" aria-hidden="true"></i>
+                                Monochrome Filter
+                            </span>
+                        </label>
+                        <small id="monochrome-desc" class="control-description">
+                            Grayscale filter for color accessibility
+                        </small>
+                    </div>
+                    
+                    <!-- Reset Button -->
+                    <div class="control-group">
+                        <button id="reset-settings" class="reset-btn" aria-describedby="reset-desc">
+                            <i class="fas fa-undo" aria-hidden="true"></i>
+                            Reset All Settings
+                        </button>
+                        <small id="reset-desc" class="control-description">
+                            Restore default appearance and settings
+                        </small>
+                    </div>
+                </section>
+                
+                <!-- Operability Section -->
+                <section class="control-section" aria-labelledby="operability-heading">
+                    <h3 id="operability-heading"><i class="fas fa-keyboard" aria-hidden="true"></i> Operability</h3>
+                    
+                    <!-- Keyboard Focus Mode -->
+                    <div class="control-group">
+                        <label class="toggle-control">
+                            <input type="checkbox" id="focus-mode" aria-describedby="focus-mode-desc">
+                            <span class="toggle-slider"></span>
+                            <span class="control-text">
+                                <i class="fas fa-crosshairs" aria-hidden="true"></i>
+                                Enhanced Focus Mode
+                            </span>
+                        </label>
+                        <small id="focus-mode-desc" class="control-description">
+                            Enhanced focus indicators for keyboard navigation
+                        </small>
+                    </div>
+                </section>
+                
+                <!-- Text-to-Speech Section -->
+                <section class="control-section" aria-labelledby="tts-heading">
+                    <h3 id="tts-heading"><i class="fas fa-volume-high" aria-hidden="true"></i> Text-to-Speech</h3>
+                    
+                    <!-- Voice Selection -->
+                    <div class="control-group">
+                        <label for="voice-select" class="control-label">
+                            <i class="fas fa-microphone" aria-hidden="true"></i>
+                            Voice Selection
+                        </label>
+                        <select id="voice-select" class="voice-select" aria-describedby="voice-desc">
+                            <option value="">Loading voices...</option>
+                        </select>
+                        <small id="voice-desc" class="control-description">
+                            Choose from available system voices
+                        </small>
+                    </div>
+                    
+                    <!-- Speed Control -->
+                    <div class="control-group">
+                        <label for="speed-slider" class="control-label">
+                            <i class="fas fa-gauge-high" aria-hidden="true"></i>
+                            Speed: <span id="speed-value">1.0x</span>
+                        </label>
+                        <div class="slider-container">
+                            <button id="speed-decrease" class="slider-btn" aria-label="Decrease reading speed">
+                                <i class="fas fa-minus" aria-hidden="true"></i>
+                            </button>
+                            <input type="range" id="speed-slider" class="slider" min="5" max="20" value="10" step="1" aria-describedby="speed-value">
+                            <button id="speed-increase" class="slider-btn" aria-label="Increase reading speed">
+                                <i class="fas fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- TTS Controls -->
+                    <div class="control-group">
+                        <div class="tts-buttons">
+                            <button id="read-selected" class="tts-btn" aria-describedby="read-selected-desc">
+                                <i class="fas fa-play" aria-hidden="true"></i>
+                                Read Selected
+                            </button>
+                            <button id="stop-reading" class="tts-btn" aria-describedby="stop-reading-desc">
+                                <i class="fas fa-stop" aria-hidden="true"></i>
+                                Stop Reading
+                            </button>
+                        </div>
+                        <small id="read-selected-desc" class="control-description">
+                            Select text and click to read aloud
+                        </small>
+                        <small id="stop-reading-desc" class="control-description">
+                            Stop current speech playback
+                        </small>
+                    </div>
+                    
+                    <!-- PDF Upload and Reading -->
+                    <div class="control-group">
+                        <label for="pdf-upload" class="pdf-upload-label">
+                            <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                            <span class="upload-text">Choose PDF File</span>
+                            <input type="file" id="pdf-upload" accept=".pdf" class="pdf-upload-input" aria-describedby="pdf-upload-desc">
+                        </label>
+                        <small id="pdf-upload-desc" class="control-description">
+                            Select a PDF file to extract and read its content
+                        </small>
+                        
+                        <div class="pdf-status" id="pdf-status" style="display: none;">
+                            <div class="pdf-info">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                                <span class="pdf-filename" id="pdf-filename">No file selected</span>
+                                <span class="pdf-pages" id="pdf-pages"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="pdf-controls">
+                            <button id="read-pdf-btn" class="pdf-btn disabled" disabled>
+                                <i class="fas fa-file-audio" aria-hidden="true"></i>
+                                <span class="btn-text">Read PDF Content</span>
+                                <span class="loading-indicator" aria-hidden="true">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </span>
+                            </button>
+                            
+                            <button id="demo-pdf-btn" class="demo-btn">
+                                <i class="fas fa-play-circle" aria-hidden="true"></i>
+                                Demo Reader
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main id="main-content" class="main-content" role="main" aria-label="Main Content">
+            <header class="content-header">
+                <h1>AccessiRead: Accessibility Enhancement Tool</h1>
+                <p class="subtitle">Empowering digital accessibility through advanced reading and visual aids</p>
+            </header>
+            
+            <article class="content-article">
+                <section class="content-block" aria-labelledby="about-heading">
+                    <h2 id="about-heading">About AccessiRead</h2>
+                    <p>AccessiRead is a comprehensive accessibility enhancement tool designed to make digital content more accessible and readable for users with diverse needs. Our solution provides a wide range of customizable features that adapt to individual preferences and accessibility requirements.</p>
+                </section>
+                
+                <section class="content-block" aria-labelledby="features-heading">
+                    <h2 id="features-heading">Key Features</h2>
+                    
+                    <div class="feature-category">
+                        <h3>Visual Accessibility</h3>
+                        <p>Our visual aids include adjustable font sizes ranging from 12px to 24px, allowing users to find their optimal reading size. The dyslexic-friendly font option switches to OpenDyslexic, specifically designed to improve readability for users with dyslexia. Line spacing controls help reduce visual crowding, while paragraph highlighting enables focused reading by allowing users to click and highlight individual content sections.</p>
+                    </div>
+                    
+                    <div class="feature-category">
+                        <h3>Theme Customization</h3>
+                        <p>AccessiRead offers multiple theme options to accommodate different visual needs and preferences. Dark mode provides a comfortable reading experience in low-light conditions, while high contrast mode enhances visibility for users with visual impairments. Low contrast mode reduces eye strain for users sensitive to bright colors, and the monochrome filter assists users with color vision deficiencies by converting all content to grayscale.</p>
+                    </div>
+                    
+                    <div class="feature-category">
+                        <h3>Enhanced Navigation</h3>
+                        <p>The enhanced focus mode improves keyboard navigation by providing clearer focus indicators and better visual feedback. This feature is essential for users who rely on keyboard navigation or assistive technologies to browse and interact with web content.</p>
+                    </div>
+                    
+                    <div class="feature-category">
+                        <h3>Text-to-Speech Technology</h3>
+                        <p>Our advanced text-to-speech system leverages the Web Speech API to provide high-quality audio rendering of text content. Users can select from available system voices, adjust reading speed from 0.5x to 2.0x, and choose to read selected text portions or entire documents. The PDF to Audio feature demonstrates how documents can be converted to speech for hands-free consumption.</p>
+                    </div>
+                </section>
+                
+                <section class="content-block" aria-labelledby="usage-heading">
+                    <h2 id="usage-heading">How to Use AccessiRead</h2>
+                    <p>All accessibility controls are located in the sidebar on the left side of the screen. Simply toggle the features you need, adjust sliders to your preferred settings, and experience immediate changes to the content display. Your preferences are automatically saved and will be restored when you return to the site.</p>
+                    
+                    <p>To use the text-to-speech features, select any text on this page and click "Read Selected" to hear it spoken aloud. The PDF to Audio feature provides a demonstration of how document content can be converted to speech for accessibility purposes.</p>
+                </section>
+                
+                <section class="content-block" aria-labelledby="accessibility-heading">
+                    <h2 id="accessibility-heading">Accessibility Compliance</h2>
+                    <p>AccessiRead is built following WCAG 2.1 AA guidelines to ensure maximum accessibility. The interface includes proper semantic HTML structure, comprehensive ARIA labels, keyboard navigation support, and screen reader compatibility. All color contrasts meet or exceed accessibility standards, and interactive elements provide clear visual and auditory feedback.</p>
+                </section>
+                
+                <section class="content-block" aria-labelledby="technology-heading">
+                    <h2 id="technology-heading">Technology & Implementation</h2>
+                    <p>This tool is built using modern web technologies including HTML5, CSS3, and vanilla JavaScript. The text-to-speech functionality utilizes the Web Speech API, while visual modifications are implemented through CSS custom properties and JavaScript DOM manipulation. The responsive design ensures optimal functionality across desktop and mobile devices.</p>
+                </section>
+                
+                <section class="content-block" aria-labelledby="demo-heading">
+                    <h2 id="demo-heading">Try the Features</h2>
+                    <p>Feel free to experiment with all the accessibility features available in the sidebar. Try adjusting the font size, enabling different themes, using the text-to-speech functionality, and exploring how each feature enhances the reading experience. Select this text and click "Read Selected" to hear it spoken aloud, or try the PDF to Audio feature for a demonstration of document reading capabilities.</p>
+                    
+                    <p>The paragraph highlighting feature allows you to click on any content block to highlight it for focused reading. This is particularly useful for users who need to concentrate on specific sections of text or who benefit from visual emphasis while reading.</p>
+                </section>
+            </article>
+            
+            <!-- Keyboard Shortcuts Guide -->
+            <aside class="shortcuts-guide" aria-labelledby="shortcuts-heading">
+                <h3 id="shortcuts-heading">Keyboard Shortcuts</h3>
+                <ul>
+                    <li><kbd>Tab</kbd> - Navigate between controls</li>
+                    <li><kbd>Space</kbd> - Toggle checkboxes and buttons</li>
+                    <li><kbd>Enter</kbd> - Activate buttons</li>
+                    <li><kbd>Arrow Keys</kbd> - Adjust sliders</li>
+                    <li><kbd>Esc</kbd> - Stop text-to-speech</li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+    
+    <!-- Status Messages -->
+    <div id="status-messages" class="status-messages" aria-live="polite" aria-atomic="true"></div>
+    
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
